@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
 import StatePanel, { isPanelState } from "@/components/StatePanel";
+import AddToCartButton from "@/components/AddToCartButton";
 import { getProduct } from "@/data/catalog";
 import { money, date } from "@/lib/format";
 import { getPhoto } from "@/lib/unsplash";
@@ -76,6 +77,9 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
               <dt>Category</dt>
               <dd>{category.name}</dd>
             </dl>
+            <div style={{ marginTop: "20px" }}>
+              <AddToCartButton slug={product.slug} name={product.name} />
+            </div>
           </div>
         </div>
       </StatePanel>
