@@ -39,7 +39,7 @@ See spec.
 | Phase | Name | Status |
 |---|---|---|
 | 1 | Cart state + header indicator + add to cart | Done |
-| 2 | Cart page (review, edit, totals, states) | Not started |
+| 2 | Cart page (review, edit, totals, states) | Done |
 | 3 | Checkout route handler + checkout form | Not started |
 | 4 | Confirmation + clear-on-success + tests + review | Not started |
 
@@ -105,16 +105,15 @@ quantity change, remove, and empty, with the four states.
 
 ### Tasks
 
-- [ ] `lib/cart.ts`: add `resolveLines(items)` → `{ slug, name, unitPriceEUR,
+- [x] `lib/cart.ts`: add `resolveLines(items)` → `{ slug, name, unitPriceEUR,
       quantity, lineTotalEUR }[]` using `data/catalog.ts`, and `cartTotal(lines)`.
       Skip/flag items whose slug is not in the catalogue.
-- [ ] `app/cart/page.tsx` (client, or a client subtree): render the lines via the
-      house `StatePanel` — loading while the provider is not `ready`, empty when the
-      cart has no items (with a link back to a category), success with the line list
-      and grand total.
-- [ ] Line controls: a labelled quantity input (whole number ≥ 1), a remove
+- [x] `app/cart/page.tsx` (client): render the lines via the house `StatePanel` —
+      loading while the store is not `ready`, empty when the cart has no items (with
+      a link back to a category), success with the line list and grand total.
+- [x] Line controls: a labelled quantity input (whole number ≥ 1), a remove
       control, and an empty-cart control — all with accessible labels.
-- [ ] Money via `money()` from `lib/format.ts`; the page header uses `PageHeader`.
+- [x] Money via `money()` from `lib/format.ts`; the page header uses `PageHeader`.
 
 ### Technical details
 
@@ -234,3 +233,4 @@ only on success, and the feature is fully tested and reviewed.
 | Date | Phases touched | Notes |
 |---|---|---|
 | 2026-09-22 | Phase 1 | Cart store + header indicator + add-to-cart. typecheck/lint/build green; verified in browser (count increments and persists). Deviated to a module store (see Deviations). |
+| 2026-09-22 | Phase 2 | Cart page: lines, quantity edit, remove, empty, grand total, four states. typecheck/lint/build green; verified in browser (Total 131.50 EUR for two lines). |
