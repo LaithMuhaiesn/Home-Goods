@@ -41,7 +41,37 @@ a {
 .container {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 40px 20px 80px;
+  padding: 24px 20px 80px;
+}
+
+/* Site header */
+.site-header {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+
+.site-brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.cart-indicator {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 600;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+
+.cart-indicator:hover {
+  border-color: var(--accent);
 }
 
 /* Page header block */

@@ -38,13 +38,13 @@ See spec.
 
 | Phase | Name | Status |
 |---|---|---|
-| 1 | Cart state + header indicator + add to cart | Not started |
+| 1 | Cart state + header indicator + add to cart | Done |
 | 2 | Cart page (review, edit, totals, states) | Not started |
 | 3 | Checkout route handler + checkout form | Not started |
 | 4 | Confirmation + clear-on-success + tests + review | Not started |
 
-**Current state of the working tree** — Spec committed on the feature branch.
-Nothing implemented yet.
+**Current state of the working tree** — Phase 1 implemented and committed: cart
+store, header indicator on every page, add-to-cart on the product page.
 
 ## Action required
 
@@ -61,21 +61,22 @@ Nothing implemented yet.
 
 ### Tasks
 
-- [ ] `lib/cart.ts`: pure cart types and operations — `CartItem = { slug, quantity }`,
+- [x] `lib/cart.ts`: pure cart types and operations — `CartItem = { slug, quantity }`,
       and pure functions `addItem(items, slug)`, `setQuantity(items, slug, qty)`,
       `removeItem(items, slug)`, `cartCount(items)`. Adding an existing slug merges
       quantity; setting quantity < 1 removes the line.
-- [ ] `components/CartProvider.tsx` (client): React context holding the cart,
-      hydrated from `localStorage` on mount and written back on change; exposes the
-      items, `count`, and the mutators. A `ready` flag distinguishes "reading
-      storage" (loading) from "read, empty".
-- [ ] `components/CartIndicator.tsx` (client): a header link to `/cart` showing the
+- [x] Cart store (client): hydrated from `localStorage`, written back on change;
+      exposes the items, `count`, and the mutators. A `ready` flag distinguishes
+      "reading storage" (loading) from "read, empty". **Implemented as a module store
+      via `useSyncExternalStore` (`lib/cartStore.ts` + `components/useCart.ts`)
+      instead of a Context provider — see Deviations.**
+- [x] `components/CartIndicator.tsx` (client): a header link to `/cart` showing the
       count, with an `aria-live` region so count changes are announced.
-- [ ] `components/AddToCartButton.tsx` (client): calls the provider's add for a
+- [x] `components/AddToCartButton.tsx` (client): calls the store's add for a
       given slug.
-- [ ] `app/layout.tsx`: wrap children in `CartProvider` and render a site header
-      containing the `CartIndicator` on every page.
-- [ ] Product page: render `AddToCartButton` for the product (success state only).
+- [x] `app/layout.tsx`: render a site header containing the `CartIndicator` on
+      every page (no provider needed with the module store).
+- [x] Product page: render `AddToCartButton` for the product (success state only).
 
 ### Technical details
 
@@ -219,10 +220,17 @@ only on success, and the feature is fully tested and reviewed.
 
 ## Deviations
 
-None so far.
+- **Phase 1 — cart state: Context provider → module store via `useSyncExternalStore`.**
+  The plan specified a `CartProvider` using React context + `useState`, reading
+  `localStorage` in a mount effect. ESLint's `react-hooks/set-state-in-effect`
+  correctly flagged the synchronous `setState` in that effect. Rather than disable
+  the rule, the cart became a module store (`lib/cartStore.ts`) consumed through
+  `useSyncExternalStore` (`components/useCart.ts`), with a server snapshot for
+  SSR-safe hydration. This is the idiomatic pattern for subscribing to an external
+  store and removed the need for a provider entirely.
 
 ## Session log
 
 | Date | Phases touched | Notes |
 |---|---|---|
-| | | |
+| 2026-09-22 | Phase 1 | Cart store + header indicator + add-to-cart. typecheck/lint/build green; verified in browser (count increments and persists). Deviated to a module store (see Deviations). |
