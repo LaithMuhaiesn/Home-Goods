@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+build/
+
+# env — real secrets never committed; .env.example IS committed
+.env
+.env*.local
+
+# test artifacts
+playwright-report/
+test-results/
+.vitest/
+coverage/
+
+# misc
+next-env.d.ts
+*.tsbuildinfo
+*.log
+.DS_Store
