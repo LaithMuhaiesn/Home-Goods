@@ -1,7 +1,7 @@
 # Submission
 
 - Site: https://home-goods-steel.vercel.app
-- Preview deployment from a feature branch: <PREVIEW URL — newest deployment for the `docs/submission` branch in Vercel>
+- Preview deployment from a feature branch: https://home-goods-git-docs-submission-laith-9905.vercel.app (the `docs/submission` branch alias; public, Unsplash call verified)
 - Stack: Next.js 16.3.5 (App Router), React 19.3.0, TypeScript 6.0.3, Node 24 LTS
 - External service and the variable that holds its key: Unsplash Search Photos API / `UNSPLASH_ACCESS_KEY` (verified working on the deployed site)
 
