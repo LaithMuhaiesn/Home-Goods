@@ -54,6 +54,45 @@ export const catalog: Category[] = [
       },
     ],
   },
+  {
+    slug: "kitchen",
+    name: "Kitchen",
+    blurb: "Tools and tableware that earn their place on the counter.",
+    products: [
+      {
+        slug: "cast-iron-skillet",
+        name: "Cast-Iron Skillet",
+        priceEUR: 54,
+        description: "A pre-seasoned 26 cm skillet that moves from hob to oven.",
+        imageQuery: "cast iron skillet",
+        addedAt: "2026-09-02",
+      },
+      {
+        slug: "walnut-cutting-board",
+        name: "Walnut Cutting Board",
+        priceEUR: 39.5,
+        description: "An end-grain walnut board with hand-cut finger grips.",
+        imageQuery: "walnut cutting board",
+        addedAt: "2026-09-06",
+      },
+      {
+        slug: "stoneware-mixing-bowls",
+        name: "Stoneware Mixing Bowls",
+        priceEUR: 48,
+        description: "A nesting set of three glazed stoneware bowls.",
+        imageQuery: "stoneware mixing bowls",
+        addedAt: "2026-09-09",
+      },
+      {
+        slug: "copper-measuring-cups",
+        name: "Copper Measuring Cups",
+        priceEUR: 32,
+        description: "Four polished copper cups on a leather hanging loop.",
+        imageQuery: "copper measuring cups",
+        addedAt: "2026-09-12",
+      },
+    ],
+  },
 ];
 
 export function getCategory(slug: string): Category | undefined {
