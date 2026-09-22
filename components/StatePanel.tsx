@@ -17,6 +17,10 @@ export type StatePanelProps = {
   retryHref: string;
   /** What the user was trying to see, used in empty/error copy. */
   subject: string;
+  /** Optional overrides for the empty state (e.g. a "no search matches" case). */
+  emptyTitle?: string;
+  emptyBody?: string;
+  actionLabel?: string;
   /** Shown in the success state. */
   children?: React.ReactNode;
 };
@@ -30,6 +34,9 @@ export default function StatePanel({
   state,
   retryHref,
   subject,
+  emptyTitle,
+  emptyBody,
+  actionLabel,
   children,
 }: StatePanelProps) {
   if (state === "success") {
@@ -55,13 +62,13 @@ export default function StatePanel({
   if (state === "empty") {
     return (
       <div className="state" data-testid="state-panel" data-state="empty">
-        <h2>Nothing here yet</h2>
+        <h2>{emptyTitle ?? "Nothing here yet"}</h2>
         <p>
-          There are no {subject} to show. Add a category or check back once
-          items have been published.
+          {emptyBody ??
+            `There are no ${subject} to show. Add a category or check back once items have been published.`}
         </p>
-        <Link className="btn" href={retryHref}>
-          Back to {subject}
+        <Link className="btn" href={retryHref} data-testid="empty-action">
+          {actionLabel ?? `Back to ${subject}`}
         </Link>
       </div>
     );
