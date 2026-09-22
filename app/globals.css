@@ -66,6 +66,36 @@ a {
   max-width: 60ch;
 }
 
+/* Category search */
+.search {
+  margin: 0 0 20px;
+}
+
+.search-label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--fg);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
 /* Product grid */
 .grid {
   display: grid;
