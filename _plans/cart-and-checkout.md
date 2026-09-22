@@ -40,7 +40,7 @@ See spec.
 |---|---|---|
 | 1 | Cart state + header indicator + add to cart | Done |
 | 2 | Cart page (review, edit, totals, states) | Done |
-| 3 | Checkout route handler + checkout form | Not started |
+| 3 | Checkout route handler + checkout form | Done |
 | 4 | Confirmation + clear-on-success + tests + review | Not started |
 
 **Current state of the working tree** — Phase 1 implemented and committed: cart
@@ -136,17 +136,17 @@ authoritative order summary; `/checkout` collects details and calls it.
 
 ### Tasks
 
-- [ ] `lib/checkout.ts`: pure `validateOrder(input)` → either a typed error
+- [x] `lib/checkout.ts`: pure `validateOrder(input)` → either a typed error
       (`empty_cart` / `invalid_item` / `invalid_quantity` / `invalid_details`) or a
       computed order (`{ orderId, lines, totalEUR }`) built from the catalogue.
-- [ ] `app/api/checkout/route.ts` (POST): parse the body, call `validateOrder`,
+- [x] `app/api/checkout/route.ts` (POST): parse the body, call `validateOrder`,
       return the order on success or the house error envelope with the mapped HTTP
       status; never throw (unexpected → `unexpected` 500).
-- [ ] `app/checkout/page.tsx` (client): order summary (from the cart) + a form for
+- [x] `app/checkout/page.tsx` (client): order summary (from the cart) + a form for
       name, email, address, each with a visible label; client-side validation for a
-      fast path; on submit POST to `/api/checkout`. Blocks/redirects when the cart
-      is empty. Field errors shown as text tied to the field.
-- [ ] On success, stash the returned order for the confirmation step (Phase 4) and
+      fast path; on submit POST to `/api/checkout`. Blocks when the cart is empty.
+      Field errors shown as text tied to the field.
+- [x] On success, stash the returned order (`sessionStorage` `order:last`) and
       navigate to the confirmation page.
 
 ### Technical details
@@ -234,3 +234,4 @@ only on success, and the feature is fully tested and reviewed.
 |---|---|---|
 | 2026-09-22 | Phase 1 | Cart store + header indicator + add-to-cart. typecheck/lint/build green; verified in browser (count increments and persists). Deviated to a module store (see Deviations). |
 | 2026-09-22 | Phase 2 | Cart page: lines, quantity edit, remove, empty, grand total, four states. typecheck/lint/build green; verified in browser (Total 131.50 EUR for two lines). |
+| 2026-09-22 | Phase 3 | Checkout route handler + form. typecheck/lint/build green; verified route with curl — valid order totals 174.00 from the catalogue, client-sent price ignored (stays 89), and empty_cart/invalid_item/invalid_details return the right code + envelope. |
