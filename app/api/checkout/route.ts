@@ -9,9 +9,10 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     body = (await request.json()) as CheckoutInput;
   } catch {
+    // A body we cannot parse is a client error, not a server fault.
     return NextResponse.json(
-      { error: { code: "unexpected", message: "Malformed request body." } },
-      { status: 500 },
+      { error: { code: "invalid_details", message: "Malformed request body." } },
+      { status: 400 },
     );
   }
 

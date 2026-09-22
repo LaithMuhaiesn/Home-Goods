@@ -8,7 +8,7 @@ import { resolveLines, cartTotal } from "@/lib/cart";
 import { money } from "@/lib/format";
 
 export default function CartPage() {
-  const { items, ready, setQty, remove, clear } = useCart();
+  const { items, ready, error, setQty, remove, clear } = useCart();
 
   const header = (
     <PageHeader
@@ -23,6 +23,15 @@ export default function CartPage() {
       <>
         {header}
         <StatePanel state="loading" retryHref="/cart" subject="your cart" />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        {header}
+        <StatePanel state="error" retryHref="/cart" subject="your cart" />
       </>
     );
   }

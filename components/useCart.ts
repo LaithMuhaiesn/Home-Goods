@@ -26,6 +26,7 @@ export function useCart() {
   return {
     items: snapshot.items,
     ready: snapshot.ready,
+    error: snapshot.error,
     count: cartCount(snapshot.items),
     add: addToCart,
     setQty: setCartQuantity,

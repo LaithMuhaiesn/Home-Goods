@@ -11,27 +11,33 @@ export type CartSnapshot = {
   items: CartItem[];
   /** False until storage has been read on the client (the loading state). */
   ready: boolean;
+  /** True if reading persistent storage failed (the error state). */
+  error: boolean;
 };
 
 let items: CartItem[] = [];
 let ready = false;
-let snapshot: CartSnapshot = { items, ready };
-const SERVER_SNAPSHOT: CartSnapshot = { items: [], ready: false };
+let error = false;
+let snapshot: CartSnapshot = { items, ready, error };
+const SERVER_SNAPSHOT: CartSnapshot = { items: [], ready: false, error: false };
 const listeners = new Set<() => void>();
 let initialized = false;
 
 function refresh() {
-  snapshot = { items, ready };
+  snapshot = { items, ready, error };
 }
 
 function emit() {
   for (const listener of listeners) listener();
 }
 
+// Storage being unavailable (blocked/private mode) is an error; merely corrupt
+// data is treated as an empty cart. So getItem may throw here — the caller
+// catches it and flips the error flag — while parse failures degrade to [].
 function readStorage(): CartItem[] {
+  const raw = window.localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
     return parsed.filter(
@@ -57,7 +63,13 @@ function persist() {
 function ensureInitialized() {
   if (initialized) return;
   initialized = true;
-  items = readStorage();
+  try {
+    items = readStorage();
+    error = false;
+  } catch {
+    items = [];
+    error = true;
+  }
   ready = true;
   refresh();
 }

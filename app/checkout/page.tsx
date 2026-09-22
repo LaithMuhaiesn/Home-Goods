@@ -8,6 +8,7 @@ import StatePanel from "@/components/StatePanel";
 import { useCart } from "@/components/useCart";
 import { resolveLines, cartTotal } from "@/lib/cart";
 import { isValidEmail } from "@/lib/checkout";
+import { setLastOrder } from "@/lib/orderStore";
 import { money } from "@/lib/format";
 
 type FieldErrors = {
@@ -25,7 +26,7 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState(false);
 
   const header = (
     <PageHeader
@@ -75,7 +76,7 @@ export default function CheckoutPage() {
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
-    setFormError(null);
+    setSubmitError(false);
     if (!validate()) return;
 
     setSubmitting(true);
@@ -85,30 +86,20 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items, fullName, email, address }),
       });
-      const data = await response.json();
 
       if (response.ok) {
-        try {
-          window.sessionStorage.setItem("order:last", JSON.stringify(data));
-        } catch {
-          // If storage is unavailable the confirmation will show its empty state.
-        }
+        const data = await response.json();
+        setLastOrder(data);
         router.push("/checkout/confirmation");
         return;
       }
 
-      const code = data?.error?.code;
-      if (code === "invalid_details") {
-        setFormError("Please check your details and try again.");
-      } else if (code === "empty_cart" || code === "invalid_item" || code === "invalid_quantity") {
-        setFormError(
-          "Something changed in your cart. Please review it and try again.",
-        );
-      } else {
-        setFormError("Something went wrong. Please try again.");
-      }
+      // Any non-2xx (empty_cart / invalid_item / invalid_quantity /
+      // invalid_details / unexpected) is a hard failure: show the error state
+      // and keep the cart intact.
+      setSubmitError(true);
     } catch {
-      setFormError("Could not reach the server. Please try again.");
+      setSubmitError(true);
     } finally {
       setSubmitting(false);
     }
@@ -145,6 +136,8 @@ export default function CheckoutPage() {
 
       {submitting ? (
         <StatePanel state="loading" retryHref="/checkout" subject="your order" />
+      ) : submitError ? (
+        <StatePanel state="error" retryHref="/checkout" subject="your order" />
       ) : (
         <form className="checkout-form" onSubmit={onSubmit} data-testid="checkout-form" noValidate>
           <h2 className="checkout-subhead">Delivery details</h2>
@@ -196,12 +189,6 @@ export default function CheckoutPage() {
               </span>
             )}
           </label>
-
-          {formError && (
-            <p className="field-error" role="alert" data-testid="checkout-error">
-              {formError}
-            </p>
-          )}
 
           <div className="checkout-actions">
             <Link className="link-btn" href="/cart">

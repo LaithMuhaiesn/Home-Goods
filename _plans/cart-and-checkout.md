@@ -41,7 +41,7 @@ See spec.
 | 1 | Cart state + header indicator + add to cart | Done |
 | 2 | Cart page (review, edit, totals, states) | Done |
 | 3 | Checkout route handler + checkout form | Done |
-| 4 | Confirmation + clear-on-success + tests + review | Not started |
+| 4 | Confirmation + clear-on-success + tests + review | Done |
 
 **Current state of the working tree** — Phase 1 implemented and committed: cart
 store, header indicator on every page, add-to-cart on the product page.
@@ -175,20 +175,23 @@ only on success, and the feature is fully tested and reviewed.
 
 ### Tasks
 
-- [ ] `app/checkout/confirmation/page.tsx` (client): read the stashed order; show
+- [x] `app/checkout/confirmation/page.tsx` (client): read the stashed order; show
       order id, lines, quantities, unit prices, line totals, grand total (all via
-      `money()`), inside `StatePanel` success. If no stashed order (direct visit or
-      post-clear refresh), show the empty state — not an error — explaining there is
-      no recent order and linking back to shopping.
-- [ ] Clear the browser cart exactly once, after a successful confirmation render.
-- [ ] `tests/cart.test.ts` (Vitest): cart ops + `resolveLines`/`cartTotal`.
-- [ ] `tests/checkout.test.ts` (Vitest): `validateOrder` / the route — valid order,
-      empty cart, invalid item, invalid quantity, invalid details, client price
-      ignored, unexpected.
-- [ ] `tests/cart-checkout.spec.ts` (Playwright): add to cart → cart shows line →
+      `money()`), inside `StatePanel` success. If no stashed order, show the empty
+      state — not an error — explaining there is no recent order.
+- [x] Clear the browser cart exactly once, after a successful confirmation render.
+- [x] `tests/cart.test.ts` (Vitest): cart ops + `resolveLines`/`cartTotal`.
+- [x] `tests/checkout.test.ts` (Vitest): `validateOrder` — valid order, empty cart,
+      invalid item, invalid quantity, invalid details, client price ignored.
+- [x] `tests/cart-checkout.spec.ts` (Playwright): add to cart → cart shows line →
       checkout with valid details → confirmation shows totals → cart cleared; plus
       the empty-cart-blocks-checkout path.
-- [ ] Run the `site-reviewer`, fix BLOCKING findings, browser pass, then merge.
+- [x] Run the `site-reviewer`, fix BLOCKING findings, browser pass, then merge.
+
+**Order handoff deviation:** the plan said stash the order in `sessionStorage`
+directly. Implemented via a small module store (`lib/orderStore.ts`) read with
+`useSyncExternalStore` and backed by `sessionStorage`, for the same
+lint/hydration reason as the cart store in Phase 1. Behaviour is unchanged.
 
 ### Technical details
 
@@ -235,3 +238,4 @@ only on success, and the feature is fully tested and reviewed.
 | 2026-09-22 | Phase 1 | Cart store + header indicator + add-to-cart. typecheck/lint/build green; verified in browser (count increments and persists). Deviated to a module store (see Deviations). |
 | 2026-09-22 | Phase 2 | Cart page: lines, quantity edit, remove, empty, grand total, four states. typecheck/lint/build green; verified in browser (Total 131.50 EUR for two lines). |
 | 2026-09-22 | Phase 3 | Checkout route handler + form. typecheck/lint/build green; verified route with curl — valid order totals 174.00 from the catalogue, client-sent price ignored (stays 89), and empty_cart/invalid_item/invalid_details return the right code + envelope. |
+| 2026-09-22 | Phase 4 | Confirmation page + clear-on-success, Vitest (cart + checkout) and Playwright (full flow + empty-cart-blocks-checkout). All checks green (30 unit, 17 e2e). **site-reviewer: 1 BLOCKING — the new cart/checkout/confirmation lists were missing the house error state — plus 1 advisory (malformed body returned 500). Both fixed: error state added to all three via store error flags / submit-failure, malformed body now 400. Re-review: PASS — no findings.** |
