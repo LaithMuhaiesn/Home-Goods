@@ -93,6 +93,45 @@ export const catalog: Category[] = [
       },
     ],
   },
+  {
+    slug: "lighting",
+    name: "Lighting",
+    blurb: "Warm, considered light for every corner of the room.",
+    products: [
+      {
+        slug: "paper-floor-lantern",
+        name: "Paper Floor Lantern",
+        priceEUR: 79,
+        description: "A tall rice-paper lantern that casts a soft, even glow.",
+        imageQuery: "paper floor lantern",
+        addedAt: "2026-09-03",
+      },
+      {
+        slug: "brass-picture-light",
+        name: "Brass Picture Light",
+        priceEUR: 64,
+        description: "A slim brass fixture that washes light across framed art.",
+        imageQuery: "brass picture light",
+        addedAt: "2026-09-07",
+      },
+      {
+        slug: "ceramic-table-lamp",
+        name: "Ceramic Table Lamp",
+        priceEUR: 95,
+        description: "A rounded ceramic base with a natural linen drum shade.",
+        imageQuery: "ceramic table lamp",
+        addedAt: "2026-09-11",
+      },
+      {
+        slug: "rattan-pendant-shade",
+        name: "Rattan Pendant Shade",
+        priceEUR: 58,
+        description: "A hand-woven rattan pendant that throws patterned shadows.",
+        imageQuery: "rattan pendant shade",
+        addedAt: "2026-09-14",
+      },
+    ],
+  },
 ];
 
 export function getCategory(slug: string): Category | undefined {
