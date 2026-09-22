@@ -3,7 +3,7 @@
 - Site: https://home-goods-steel.vercel.app
 - Preview deployment from a feature branch: https://home-goods-git-docs-submission-laith-9905.vercel.app (the `docs/submission` branch alias; public, Unsplash call verified)
 - Stack: Next.js 16.3.5 (App Router), React 19.3.0, TypeScript 6.0.3, Node 24 LTS
-- External service and the variable that holds its key: Unsplash Search Photos API / `UNSPLASH_ACCESS_KEY` (verified working on the deployed site)
+- External service and the variable that holds its key: **Unsplash Search Photos API / `UNSPLASH_ACCESS_KEY`** — the site's one backend call. (Context7 / `CONTEXT7_API_KEY` is also configured, but only for Claude Code's MCP tooling; it is not called by the site — see the MCP artifact below.)
 
 ## The artifacts
 
