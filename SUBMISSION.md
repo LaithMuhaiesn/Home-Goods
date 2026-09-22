@@ -14,9 +14,14 @@
   3. The Secrets section: two variables, `.env` ignored, `.env.example` committed, external call server-side only, never `NEXT_PUBLIC_*`.
 - **MCP:** `.mcp.json` — Context7 over HTTP (`Authorization: Bearer ${CONTEXT7_API_KEY}`, header verified against context7.com docs on 2026-09-22) and Playwright over stdio.
 
+  `claude mcp list` (project-scoped servers; account-level connectors omitted), with `CONTEXT7_API_KEY` set in the environment:
+
   ```
-  <PASTE `claude mcp list` output here — both servers connected, no missing-variable warning on Context7>
+  context7: https://mcp.context7.com/mcp (HTTP) - ✔ Connected
+  playwright: npx -y @playwright/mcp@latest - ✔ Connected
   ```
+
+  Both connected, and with `CONTEXT7_API_KEY` present in the environment there is no "missing environment variables" warning. The key reaches the committed `.mcp.json` only through `${CONTEXT7_API_KEY}` — its value is never in the file.
 - **Skill:** `.claude/skills/house-style/` (SKILL.md + references/ + assets/). Its six rules were applied throughout Feature B (the cart, checkout and confirmation pages all use the house header block, the four states via `StatePanel`, and `money()`/`date()` formatting). See the note in "What went wrong" about demonstrating it firing automatically.
 - **Reviewer:** `.claude/agents/site-reviewer.md` — read-only. Three ratchet rules added, each from a real incident this run:
   1. No generated/build artifacts in the diff — a `tsconfig.tsbuildinfo` was committed in the scaffold and had to be amended out.
